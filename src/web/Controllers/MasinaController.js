@@ -17,7 +17,8 @@ export default class MasinaController{
          this.create();
          this.delete();
          this.update();
-
+         this.sort();
+         
          this.catchErr();
      }
 
@@ -38,6 +39,22 @@ export default class MasinaController{
          });
 
     }
+
+    sort = async ()=>{
+        this.route.get("/sort/:id", async (req,res,next)=>{
+            try{
+                let {id} = req.params;
+               let rez = await this.masinaService.sort(id);
+
+               res.status(200).json(rez);
+
+            }catch(e){
+                next(e);
+            }
+            
+        });
+
+   }
 
     getById= async()=>{
         this.route.get("/:id", async (req,res,next)=>{

@@ -30,26 +30,18 @@ export default  class Server{
 
         let db = await this.repo.createDb();
 
-        
-        
-
-
-
         db.sequelize.sync()
         .then( () => {
                this.app.listen(5000,async () => {
                console.log(`Express server is listening on port 5000`);
             });
         }).then(()=>{
-              let personsService =  new PersoanaService(db.models);
+              let personsService =  new PersoanaService(db.models,db.sequelize);
               let personsController = new PersoanaController(personsService,this.app);
-
-              let carsService =  new MasinaService(db.models);
+              let carsService =  new MasinaService(db.models,db.sequelize);
               let carsController = new MasinaController(carsService,this.app);
-
-              let rentalsService =  new InchiriereService(db.models);
+              let rentalsService =  new InchiriereService(db.models,db.sequelize);
               let rentalsController = new InchiriereController(rentalsService,this.app);
-
         });
 
 

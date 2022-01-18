@@ -1,8 +1,9 @@
 
 export default class PersoanaService{
       
-    constructor({Persoana}){
+    constructor({Persoana},{sequelize}){
           this.persoana = Persoana;
+          this.sequelize = sequelize;
     }
 
     getAll= async ()=>{
@@ -81,10 +82,7 @@ export default class PersoanaService{
         
         if(user.name == '' && user.email=='' && user.password == '' && user.phone == ''){
             throw new Error("Nu exista propietati pentru update!");
-        }else if(user.name == null || user.email == null || user.password == null || user.phone == null){
-            throw new Error("Propietati invalide!");
         }
-
         if(per){
             
             if(user.name){

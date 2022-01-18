@@ -1,8 +1,9 @@
 
 export default class InchiriereService{
       
-    constructor({Inchirieri}){
+    constructor({Inchirieri},{sequelize}){
           this.inchiriere = Inchirieri;
+          this.sequelize = sequelize;
     }
 
     getAll= async ()=>{
@@ -29,6 +30,27 @@ export default class InchiriereService{
             throw new Error("Nu exista Inchireire cu acest id!");
         }
         return rez;
+
+    }
+    
+    getRentalsByPersonId = async(customerId)=>{
+
+        let rez = await this.inchiriere.findAll({
+            where:{
+                persoana_id: customerId
+            },
+            include:{
+                all:true
+            },
+            order:[['id','DESC']],
+            limit:5
+        });
+
+        if(rez){
+            return rez;
+        }else{
+            throw new Error("Nu s-au gasit inchirieri facute de acest customer!");
+        }
 
     }
 

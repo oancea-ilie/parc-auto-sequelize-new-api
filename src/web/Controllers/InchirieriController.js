@@ -18,7 +18,8 @@ export default class InchiriereController{
          this.delete();
          this.update();
          this.joinAll();
-
+         this.getRentalsByPersonId();
+         
          this.catchErr();
      }
 
@@ -46,6 +47,22 @@ export default class InchiriereController{
                 let {id}= req.params;
 
                 let rez = await this.inchiriereService.getById(id);
+
+                res.status(200).json(rez);
+
+            }catch(e){
+                next(e);
+            }
+
+         });
+    }
+
+    getRentalsByPersonId = async()=>{
+        this.route.get("/by-person-id/:id", async (req,res,next)=>{
+            try{
+                let {id}= req.params;
+
+                let rez = await this.inchiriereService.getRentalsByPersonId(id);
 
                 res.status(200).json(rez);
 

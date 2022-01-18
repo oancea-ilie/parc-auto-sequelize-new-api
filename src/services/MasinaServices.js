@@ -1,10 +1,12 @@
 
+import { QueryTypes } from "sequelize";
+
 export default class MasinaService{
       
-    constructor({Masina}){
+    constructor({Masina},sequelize){
           this.masina = Masina;
+          this.sequelize = sequelize;
     }
-
     getAll= async ()=>{
           
       try{
@@ -29,6 +31,43 @@ export default class MasinaService{
             throw new Error("Nu exista Masina cu acest id!");
         }
         return rez;
+
+    }
+
+    sort = async(id)=>{
+        let sortare = 'DESC';
+
+        if(id == 'populare'){
+            console.log('INTRA');
+            let cars = await this.sequelize.query(`
+            select *,  count(masina_id) as popularitate from tema_2ass.masinas
+            inner join inchirieris i on masinas.id = i.masina_id
+            group by masina_id
+            order by popularitate desc;`, { 
+                type: QueryTypes.SELECT 
+            });
+
+            if(cars){
+                return cars;
+            }else{
+    
+                throw new Error("Nu s-au gasit Masini Populare!");
+            }
+
+        }else{
+            if(id =='marca'){
+                sortare = 'ASC';
+            }
+    
+            let cars = await this.masina.findAll({order: [[id, sortare]]});
+    
+            if(cars.length >0){
+                return cars;
+            }else{
+    
+                throw new Error("Nu s-au gasit Masini Sortate!");
+            }
+        }
 
     }
 
